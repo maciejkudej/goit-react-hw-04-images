@@ -26,12 +26,14 @@ export default function App() {
       setIsLoading(true);
       const response = fetchImagesWithQuery(searchData, page);
       response.then(data => {
-        data.data.hits.length === 0
-          ? toast.error('Nothing found')
-          : data.data.hits.forEach(({ id, webformatURL, largeImageURL }) => {
-              !images.some(image => image.id === id) &&
-                setImages(i => [...i, { id, webformatURL, largeImageURL }]);
-            });
+        if (data.data.hits.length === 0) {
+          toast.error('Nothing found');
+        } else {
+          data.data.hits.forEach(({ id, webformatURL, largeImageURL }) => {
+            !images.some(image => image.id === id) &&
+              setImages(i => [...i, { id, webformatURL, largeImageURL }]);
+          });
+        }
         setIsLoading(false);
       });
     } catch (error) {
